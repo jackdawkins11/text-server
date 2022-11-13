@@ -60,7 +60,7 @@ class MyController {
 
 	@GetMapping(value = "/messages")
 	public List<Message> getMessage(){
-		return messageRepo.findFirst5ByOrderByIdDesc();
+		return messageRepo.findFirst25ByOrderByIdDesc();
 	}
 }
 
@@ -76,5 +76,5 @@ class Message{
 }
 
 interface MessageRepo extends JpaRepository<Message,Long> {
-	List<Message> findFirst5ByOrderByIdDesc();
+	List<Message> findFirst25ByOrderByIdDesc();
 }

@@ -20,10 +20,8 @@ function TextList(props){
 class App extends React.Component {
 	constructor(props){
 		super(props);
-		this.state = {
-			value: '',
-			texts: []
-		}
+		this.state = { value: '', texts: []} 
+		this.getMessages();
 	}
 
 	handleChange(e){
@@ -40,13 +38,16 @@ class App extends React.Component {
       				headers: { "Content-Type": "application/json" },
       				body: JSON.stringify({ message: this.state.value }),
     			}).then( (r) => {
-				fetch("messages", {method: "GET"} ).then( (r) => r.json() ).then( (r) => {
-					console.log( r );
-					this.setState({texts: r.map( (msg, idx) => { return msg.message } ), value: ''})
-				})
+				this.getMessages()
 			})
 		}else{
 		}
+	}
+
+	getMessages(){
+		fetch("messages", {method: "GET"} ).then( (r) => r.json() ).then( (r) => {
+			this.setState({texts: r.map( (msg, idx) => { return msg.message } ), value: ''})
+		})
 	}
 
 	render() {

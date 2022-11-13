@@ -38,10 +38,8 @@ var App = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-		_this.state = {
-			value: '',
-			texts: []
-		};
+		_this.state = { value: '', texts: [] };
+		_this.getMessages();
 		return _this;
 	}
 
@@ -63,31 +61,37 @@ var App = function (_React$Component) {
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ message: this.state.value })
 				}).then(function (r) {
-					fetch("messages", { method: "GET" }).then(function (r) {
-						return r.json();
-					}).then(function (r) {
-						console.log(r);
-						_this2.setState({ texts: r.map(function (msg, idx) {
-								return msg.message;
-							}), value: '' });
-					});
+					_this2.getMessages();
 				});
 			} else {}
 		}
 	}, {
+		key: "getMessages",
+		value: function getMessages() {
+			var _this3 = this;
+
+			fetch("messages", { method: "GET" }).then(function (r) {
+				return r.json();
+			}).then(function (r) {
+				_this3.setState({ texts: r.map(function (msg, idx) {
+						return msg.message;
+					}), value: '' });
+			});
+		}
+	}, {
 		key: "render",
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			return React.createElement(
 				"div",
 				{ style: { display: "flex", flexDirection: "column", alignItems: "stretch" } },
 				React.createElement("textarea", { value: this.state.value,
 					onChange: function onChange(e) {
-						_this3.handleChange(e);
+						_this4.handleChange(e);
 					},
 					onKeyUp: function onKeyUp(e) {
-						_this3.handleKeyUp(e);
+						_this4.handleKeyUp(e);
 					},
 					style: textBoxStyle,
 					placeholder: "Talk shit here..."
