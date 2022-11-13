@@ -40,7 +40,7 @@ var App = function (_React$Component) {
 
 		_this.state = {
 			value: '',
-			texts: ["Hello from text 1", "Hello from text 2", "hello text3"]
+			texts: []
 		};
 		return _this;
 	}
@@ -55,24 +55,39 @@ var App = function (_React$Component) {
 	}, {
 		key: "handleKeyUp",
 		value: function handleKeyUp(e) {
+			var _this2 = this;
+
 			if (e.keyCode == 13) {
-				this.setState({ texts: this.state.texts.concat(this.state.value), value: '' });
+				fetch("messages", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ message: this.state.value })
+				}).then(function (r) {
+					fetch("messages", { method: "GET" }).then(function (r) {
+						return r.json();
+					}).then(function (r) {
+						console.log(r);
+						_this2.setState({ texts: r.map(function (msg, idx) {
+								return msg.message;
+							}), value: '' });
+					});
+				});
 			} else {}
 		}
 	}, {
 		key: "render",
 		value: function render() {
-			var _this2 = this;
+			var _this3 = this;
 
 			return React.createElement(
 				"div",
 				{ style: { display: "flex", flexDirection: "column", alignItems: "stretch" } },
 				React.createElement("textarea", { value: this.state.value,
 					onChange: function onChange(e) {
-						console.log(e);_this2.handleChange(e);
+						_this3.handleChange(e);
 					},
 					onKeyUp: function onKeyUp(e) {
-						console.log(e);_this2.handleKeyUp(e);
+						_this3.handleKeyUp(e);
 					},
 					style: textBoxStyle,
 					placeholder: "Talk shit here..."

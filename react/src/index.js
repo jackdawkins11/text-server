@@ -22,7 +22,7 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			value: '',
-			texts: ["Hello from text 1", "Hello from text 2", "hello text3"]
+			texts: []
 		}
 	}
 
@@ -35,7 +35,16 @@ class App extends React.Component {
 	
 	handleKeyUp(e){
 		if( e.keyCode == 13 ){
-			this.setState( {texts: this.state.texts.concat( this.state.value ), value: ''} )
+			fetch("messages", {
+      				method: "POST",
+      				headers: { "Content-Type": "application/json" },
+      				body: JSON.stringify({ message: this.state.value }),
+    			}).then( (r) => {
+				fetch("messages", {method: "GET"} ).then( (r) => r.json() ).then( (r) => {
+					console.log( r );
+					this.setState({texts: r.map( (msg, idx) => { return msg.message } ), value: ''})
+				})
+			})
 		}else{
 		}
 	}
@@ -43,8 +52,8 @@ class App extends React.Component {
 	render() {
 		return <div style={{display: "flex", flexDirection: "column", alignItems: "stretch" }}>
 			<textarea value={this.state.value}
-			onChange={ (e) => { console.log(e ); this.handleChange(e) } }
-			onKeyUp={ (e) => { console.log(e ); this.handleKeyUp(e) } }
+			onChange={ (e) => { this.handleChange(e) } }
+			onKeyUp={ (e) => { this.handleKeyUp(e) } }
 			style={textBoxStyle}
 			placeholder={"Talk shit here..."}
 			/>
