@@ -21,8 +21,14 @@ class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = { value: '', texts: []} 
-		this.getMessages();
 	}
+
+    	componentDidMount(){
+        	this.messageRefresher = setInterval( () => this.getMessages(), 500 );
+    	}
+    	componentWillUnmount(){
+        	clearInterval( this.messageRefresher );
+    	}
 
 	handleChange(e){
 		if( e.keyCode == 13 ){
@@ -37,16 +43,15 @@ class App extends React.Component {
       				method: "POST",
       				headers: { "Content-Type": "application/json" },
       				body: JSON.stringify({ message: this.state.value }),
-    			}).then( (r) => {
-				this.getMessages()
-			})
+    			})
+			this.setState( {value: '' } )
 		}else{
 		}
 	}
 
 	getMessages(){
 		fetch("messages", {method: "GET"} ).then( (r) => r.json() ).then( (r) => {
-			this.setState({texts: r.map( (msg, idx) => { return msg.message } ), value: ''})
+			this.setState({texts: r.map( (msg, idx) => { return msg.message } )})
 		})
 	}
 

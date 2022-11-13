@@ -39,11 +39,24 @@ var App = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 		_this.state = { value: '', texts: [] };
-		_this.getMessages();
 		return _this;
 	}
 
 	_createClass(App, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			this.messageRefresher = setInterval(function () {
+				return _this2.getMessages();
+			}, 500);
+		}
+	}, {
+		key: "componentWillUnmount",
+		value: function componentWillUnmount() {
+			clearInterval(this.messageRefresher);
+		}
+	}, {
 		key: "handleChange",
 		value: function handleChange(e) {
 			if (e.keyCode == 13) {} else {
@@ -53,16 +66,13 @@ var App = function (_React$Component) {
 	}, {
 		key: "handleKeyUp",
 		value: function handleKeyUp(e) {
-			var _this2 = this;
-
 			if (e.keyCode == 13) {
 				fetch("messages", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ message: this.state.value })
-				}).then(function (r) {
-					_this2.getMessages();
 				});
+				this.setState({ value: '' });
 			} else {}
 		}
 	}, {
@@ -75,7 +85,7 @@ var App = function (_React$Component) {
 			}).then(function (r) {
 				_this3.setState({ texts: r.map(function (msg, idx) {
 						return msg.message;
-					}), value: '' });
+					}) });
 			});
 		}
 	}, {
