@@ -6,11 +6,23 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var textBoxStyle = {
+	padding: "10px",
+	margin: "0px",
+	outline: "none",
+	border: "none",
+	resize: "none",
+	fontSize: "large",
+	backgroundColor: "gainsboro"
+};
+
 function TextList(props) {
 	return props.texts.map(function (text, idx) {
+		var textBoxStyleDarker = Object.assign({}, textBoxStyle, { backgroundColor: "darkgrey" });
+		var cBoxStyle = idx % 2 == 0 ? textBoxStyleDarker : textBoxStyle;
 		return React.createElement(
 			"p",
-			{ key: idx },
+			{ key: idx, style: cBoxStyle },
 			" ",
 			text,
 			" "
@@ -28,7 +40,7 @@ var App = function (_React$Component) {
 
 		_this.state = {
 			value: '',
-			texts: ["Hello from text 1", "Hello from text 2", "hello text3", ""]
+			texts: ["Hello from text 1", "Hello from text 2", "hello text3"]
 		};
 		return _this;
 	}
@@ -54,14 +66,16 @@ var App = function (_React$Component) {
 
 			return React.createElement(
 				"div",
-				{ style: { display: "flex", flexDirection: "column" } },
+				{ style: { display: "flex", flexDirection: "column", alignItems: "stretch" } },
 				React.createElement("textarea", { value: this.state.value,
 					onChange: function onChange(e) {
 						console.log(e);_this2.handleChange(e);
 					},
 					onKeyUp: function onKeyUp(e) {
 						console.log(e);_this2.handleKeyUp(e);
-					}
+					},
+					style: textBoxStyle,
+					placeholder: "Talk shit here..."
 				}),
 				React.createElement(TextList, { texts: this.state.texts })
 			);

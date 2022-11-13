@@ -1,7 +1,19 @@
 
+let textBoxStyle = {
+	padding: "10px",
+	margin: "0px",
+	outline: "none",
+	border: "none",
+	resize: "none",
+	fontSize: "large",
+	backgroundColor: "gainsboro"
+}
+
 function TextList(props){
 	return props.texts.map( (text, idx) => {
-		return <p key={idx}> {text} </p>
+		let textBoxStyleDarker =  Object.assign({}, textBoxStyle, {backgroundColor: "darkgrey"})
+		let cBoxStyle = idx % 2 == 0 ? textBoxStyleDarker : textBoxStyle;
+		return <p key={idx} style={cBoxStyle}> {text} </p>
 	} );
 }
 
@@ -10,7 +22,7 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			value: '',
-			texts: ["Hello from text 1", "Hello from text 2", "hello text3", ""]
+			texts: ["Hello from text 1", "Hello from text 2", "hello text3"]
 		}
 	}
 
@@ -29,10 +41,12 @@ class App extends React.Component {
 	}
 
 	render() {
-		return <div style={{display: "flex", flexDirection: "column" }}>
+		return <div style={{display: "flex", flexDirection: "column", alignItems: "stretch" }}>
 			<textarea value={this.state.value}
 			onChange={ (e) => { console.log(e ); this.handleChange(e) } }
 			onKeyUp={ (e) => { console.log(e ); this.handleKeyUp(e) } }
+			style={textBoxStyle}
+			placeholder={"Talk shit here..."}
 			/>
 			<TextList texts={this.state.texts} />
 		</div>
