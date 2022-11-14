@@ -439,10 +439,27 @@ var BackgroundCanvas = function (_React$Component) {
 		return _this;
 	}
 
-	//This starts the simulation
+	//resize
 
 
 	_createClass(BackgroundCanvas, [{
+		key: 'resize',
+		value: function resize() {
+			//Get the dom node
+			var canvas = this.canvasRef.current;
+
+			//Set its size to the size of the window
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+
+			this.simulation.camera.screenX = canvas.width / 2;
+			this.simulation.camera.screenY = canvas.width / 2;
+			this.simulation.camera.screenZ = canvas.height / 2;
+		}
+
+		//This starts the simulation
+
+	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			//Get the dom node
@@ -453,6 +470,8 @@ var BackgroundCanvas = function (_React$Component) {
 			canvas.height = window.innerHeight;
 
 			this.simulation = new Simulation(canvas.getContext('2d'));
+
+			window.addEventListener('resize', this.resize.bind(this));
 
 			requestAnimationFrame(this.animate.bind(this));
 		}

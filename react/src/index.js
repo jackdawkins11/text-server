@@ -422,6 +422,20 @@ class BackgroundCanvas extends React.Component {
 		this.canvasRef = React.createRef()
 	}
 
+	//resize
+	resize(){
+		//Get the dom node
+		let canvas = this.canvasRef.current
+
+		//Set its size to the size of the window
+		canvas.width = window.innerWidth
+		canvas.height = window.innerHeight
+    
+		this.simulation.camera.screenX = canvas.width / 2;
+    		this.simulation.camera.screenY = canvas.width / 2;
+    		this.simulation.camera.screenZ = canvas.height / 2;
+	}
+
 	//This starts the simulation
 	componentDidMount(){
 		//Get the dom node
@@ -433,7 +447,10 @@ class BackgroundCanvas extends React.Component {
 
 		this.simulation = new Simulation( canvas.getContext('2d') );
 
+		window.addEventListener( 'resize', this.resize.bind(this) );
+
 		requestAnimationFrame(this.animate.bind(this))
+	
 	}
 
 	animate(){
